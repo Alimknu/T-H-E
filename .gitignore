@@ -1,3 +1,7 @@
 TaskManager/bin/
 TaskManager/obj/
 .vscode/
+TwoSum/bin/
+TwoSum/obj/
+TwoSum.Tests/bin/
+TwoSum.Tests/obj/

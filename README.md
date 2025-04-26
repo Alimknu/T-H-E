@@ -32,3 +32,23 @@ Currently available filters:
 - "due today": Shows tasks that are due today
 - "due tomorrow": Shows tasks that are due tomorrow
 - "overdue": Shows tasks that have not been completed and have a due date in the past
+
+## How to run the TwoSum Tests:
+
+### Prerequisites
+- [.NET SDK, Version should not matter, but probably 7.0+](https://dotnet.microsoft.com/en-us/download) 
+- NUnit (For the Unit Tests) You can install NUnit by running the following command in the project's root directory: dotnet add package NUnit
+
+### How to run only the TwoSum console application:
+
+- Open a terminal
+- Find the root of the project (where you end up in "something/T-H-E" and something represents the previous directories)
+- Run the following command: dotnet run --project ./TwoSum/TwoSum.csproj
+
+The console will shortly launch and ask for your array values and then your target sum.
+
+### Run the Unit Tests
+
+- Open a terminal
+- Find the root of the project (where you end up in "something/T-H-E" and something represents the previous directories)
+- Run the following command: dotnet test
