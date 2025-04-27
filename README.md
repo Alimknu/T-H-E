@@ -4,13 +4,13 @@ Build a simple console-based Task Manager application. Automate a login form usi
 ## How to run the console-based Task Manager application:
 
 ### Prerequisites
-- [.NET SDK, Version should not matter, but probably 7.0+](https://dotnet.microsoft.com/en-us/download) 
+- [.NET SDK, Version should not matter, but 7.0+ is recommended](https://dotnet.microsoft.com/en-us/download) 
 
 ### Run the App
 
 - Open a terminal
-- Find the root of the project (where you end up in "something/T-H-E" and something represents the previous directories)
-- Run the following command: dotnet run --project ./TaskManager/TaskManager.csproj
+- Navigate to the root of the project (directory containing the "T-H-E" folder)
+- Run the following command: `dotnet run --project ./TaskManager/TaskManager.csproj`
 
 The Task Manager console will shortly launch, and you can interact with it through the console
 
@@ -33,22 +33,37 @@ Currently available filters:
 - "due tomorrow": Shows tasks that are due tomorrow
 - "overdue": Shows tasks that have not been completed and have a due date in the past
 
-## How to run the TwoSum Tests:
+## How to run the Selenium Login Automation Tests:
 
 ### Prerequisites
-- [.NET SDK, Version should not matter, but probably 7.0+](https://dotnet.microsoft.com/en-us/download) 
-- NUnit (For the Unit Tests) You can install NUnit by running the following command in the project's root directory: dotnet add package NUnit
+- [.NET SDK, Version should not matter, but 7.0+ is recommended](https://dotnet.microsoft.com/en-us/download) 
+- NUnit (For Unit Tests) You can install NUnit by running the following command in the project's root directory: `dotnet add package NUnit`
+- Selenium (For Web Browser Automation) You can install Selenium by running the following command in the project's root directory: `dotnet add package Selenium.WebDriver`
+
+### Run the Unit Tests
+
+- Open a terminal
+- Navigate to the root of the project (directory containing the "T-H-E" folder)
+- From here, navigate to the SeleniumLoginAutomation directory (`cd SeleniumLoginAutomation`)
+- Run the following command: `dotnet test`
+- Screenshots from the test suite can be found in the SeleniumLoginAutomation/bin/Debug/net[YourNetVersion] folder (an example of net[YourNetVersion] could be net9.0)
+
+## How to run TwoSum / TwoSum Unit Tests:
+
+### Prerequisites
+- [.NET SDK, Version should not matter, but 7.0+ is recommended](https://dotnet.microsoft.com/en-us/download) 
+- NUnit (For the Unit Tests) You can install NUnit by running the following command in the project's root directory: `dotnet add package NUnit`
 
 ### How to run only the TwoSum console application:
 
 - Open a terminal
-- Find the root of the project (where you end up in "something/T-H-E" and something represents the previous directories)
-- Run the following command: dotnet run --project ./TwoSum/TwoSum.csproj
+- Navigate to the root of the project (directory containing the "T-H-E" folder)
+- Run the following command: `dotnet run --project ./TwoSum/TwoSum.csproj`
 
 The console will shortly launch and ask for your array values and then your target sum.
 
 ### Run the Unit Tests
 
 - Open a terminal
-- Find the root of the project (where you end up in "something/T-H-E" and something represents the previous directories)
-- Run the following command: dotnet test
+- Navigate to the root of the project (directory containing the "T-H-E" folder)
+- Run the following command: `dotnet test`
