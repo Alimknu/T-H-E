@@ -11,15 +11,16 @@ namespace TaskManager
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        public JsonTaskStorage(string givenFilePath = null)
+        public JsonTaskStorage(string? givenFilePath = null)
         {
-            filePath = givenFilePath;
 
             // If we weren't given a path, we create a default one in the current directory
-            if (string.IsNullOrEmpty(filePath))
+            if (string.IsNullOrEmpty(givenFilePath))
             {
-                filePath = Path.Combine(Environment.CurrentDirectory, "tasks.json");
+                givenFilePath = Path.Combine(Environment.CurrentDirectory, "tasks.json");
             }
+
+            filePath = givenFilePath;
 
             //Ensure the file itself exists. If it doesn't, create it with an empty array
             if (!File.Exists(filePath))
@@ -29,14 +30,14 @@ namespace TaskManager
         }
 
         // Serializes the list of Tasks into a jsonfile
-        public void saveTasks(List<Task> tasks)
+        public void SaveTasks(List<Task> tasks)
         {
             string jsonString = JsonSerializer.Serialize(tasks, options);
             File.WriteAllText(filePath, jsonString);
         }
 
         // Reads all text from the jsonFile and deserializes it into a list of Tasks
-        public List<Task> loadTasks()
+        public List<Task> LoadTasks()
         {
             if (!File.Exists(filePath))
             {

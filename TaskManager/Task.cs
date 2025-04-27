@@ -4,19 +4,20 @@ namespace TaskManager
     public class Task
     {
         // Properties, using { get; set; } to make them auto-implemented properties
-        public Guid id { get; set; }
-        public string title { get; set; }
-        public DateTime dueDate { get; set; }
-        public bool isCompleted { get; set; }
+        // Properties need to begin with a capital letter
+        public Guid Id { get; set; }
+        public string? Title { get; set; }
+        public DateTime DueDate { get; set; }
+        public bool IsCompleted { get; set; }
 
         public Task() { }
 
         public Task(string givenTitle, DateTime givenDueDate)
         {
-            id = Guid.NewGuid();
-            title = givenTitle;
-            dueDate = givenDueDate;
-            isCompleted = false;
+            Id = Guid.NewGuid();
+            Title = givenTitle;
+            DueDate = givenDueDate;
+            IsCompleted = false;
         }
 
     }

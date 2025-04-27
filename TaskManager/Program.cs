@@ -2,92 +2,93 @@
 
 class TaskManager
 {
-    JsonTaskStorage jsonTaskStorage;
-    List<Task> tasks;
+    private readonly JsonTaskStorage jsonTaskStorage;
+    private List<Task> tasks;
 
-    public TaskManager(string filePath = null)
+    public TaskManager(JsonTaskStorage jsonTaskStorage)
     {
-        jsonTaskStorage = new JsonTaskStorage(filePath);
-        tasks = jsonTaskStorage.loadTasks();
+        this.jsonTaskStorage = jsonTaskStorage;
+        tasks = jsonTaskStorage.LoadTasks() ?? [];
     }
-    public void addTask(string title, DateTime dueDate)
+    public void AddTask(string title, DateTime dueDate)
     {
-        Task newTask = new Task(title, dueDate);
+        Task newTask = new(title, dueDate);
         tasks.Add(newTask);
-        jsonTaskStorage.saveTasks(tasks);
+        jsonTaskStorage.SaveTasks(tasks);
     }
 
-    public void editTask(Guid id, string newTitle, DateTime newDueDate)
+    public void EditTask(Guid id, string newTitle, DateTime newDueDate)
     {
-        Task findTask = tasks.FirstOrDefault(t => t.id == id);
+        Task? findTask = tasks.FirstOrDefault(t => t.Id == id);
         if (findTask != null)
         {
-            findTask.title = newTitle;
-            findTask.dueDate = newDueDate;
-            jsonTaskStorage.saveTasks(tasks);
+            findTask.Title = newTitle;
+            findTask.DueDate = newDueDate;
+            jsonTaskStorage.SaveTasks(tasks);
         }
     }
 
-    public void deleteTask(Guid id)
+    public void DeleteTask(Guid id)
     {
-        Task findTask = tasks.FirstOrDefault(t => t.id == id);
+        Task? findTask = tasks.FirstOrDefault(t => t.Id == id);
         if (findTask != null)
         {
             tasks.Remove(findTask);
-            jsonTaskStorage.saveTasks(tasks);
+            jsonTaskStorage.SaveTasks(tasks);
         }
     }
 
-    public void completeTask(Guid id)
+    public void CompleteTask(Guid id)
     {
-        Task findTask = tasks.FirstOrDefault(t => t.id == id);
+        Task? findTask = tasks.FirstOrDefault(t => t.Id == id);
         if (findTask != null)
         {
-            findTask.isCompleted = true;
-            jsonTaskStorage.saveTasks(tasks);
+            findTask.IsCompleted = true;
+            jsonTaskStorage.SaveTasks(tasks);
         }
     }
 
-    public void viewAllTasks()
+    public void ViewAllTasks()
     {
         foreach (var task in tasks)
         {
-            Console.WriteLine($"ID: {task.id}, Title: {task.title}, Due Date: {task.dueDate}, Completed: {task.isCompleted}");
+            Console.WriteLine($"ID: {task.Id}, Title: {task.Title}, Due Date: {task.DueDate}, Completed: {task.IsCompleted}");
         }
     }
 
-    public void filterTasks(string filter)
+    public void FilterTasks(string? filter)
     {
-        filter = filter.ToLower();
         if (string.IsNullOrEmpty(filter))
         {
             Console.WriteLine("No filter provided. Presenting all tasks.");
-            viewAllTasks();
+            ViewAllTasks();
             return;
         }
+
+        filter = filter.ToLower();
 
         IEnumerable<Task> filteredTasks = tasks;
 
         switch (filter)
         {
             case "completed":
-                filteredTasks = tasks.Where(t => t.isCompleted);
+                filteredTasks = tasks.Where(t => t.IsCompleted);
                 Console.WriteLine("Presenting tasks with filter: completed.");
                 break;
             case "not completed":
-                filteredTasks = tasks.Where(t => !t.isCompleted);
+                filteredTasks = tasks.Where(t => !t.IsCompleted);
                 Console.WriteLine("Presenting tasks with filter: not completed.");
                 break;
             case "due today":
-                filteredTasks = tasks.Where(t => t.dueDate.Date == DateTime.Now.Date && !t.isCompleted);
+                filteredTasks = tasks.Where(t => t.DueDate.Date == DateTime.Now.Date && !t.IsCompleted);
                 Console.WriteLine("Presenting tasks with filter: due today.");
                 break;
             case "due tomorrow":
-                filteredTasks = tasks.Where(t => t.dueDate.Date == DateTime.Now.AddDays(1).Date && !t.isCompleted);
+                filteredTasks = tasks.Where(t => t.DueDate.Date == DateTime.Now.AddDays(1).Date && !t.IsCompleted);
                 Console.WriteLine("Presenting tasks with filter: due tomorrow.");
                 break;
             case "overdue":
-                filteredTasks = tasks.Where(t => t.dueDate < DateTime.Now && !t.isCompleted);
+                filteredTasks = tasks.Where(t => t.DueDate < DateTime.Now && !t.IsCompleted);
                 Console.WriteLine("Presenting tasks with filter: overdue.");
                 break;
             default:
@@ -97,55 +98,97 @@ class TaskManager
 
         foreach (var task in filteredTasks)
         {
-            Console.WriteLine($"ID: {task.id}, Title: {task.title}, Due Date: {task.dueDate}, Completed: {task.isCompleted}");
+            Console.WriteLine($"ID: {task.Id}, Title: {task.Title}, Due Date: {task.DueDate}, Completed: {task.IsCompleted}");
         }
     }
 
     static void Main(string[] args)
     {
-        TaskManager taskManager = new TaskManager();
+        JsonTaskStorage storage = new JsonTaskStorage();
+        TaskManager taskManager = new TaskManager(storage);
         string command = string.Empty;
 
         while (command != "exit")
         {
             Console.WriteLine("Enter a command (add, edit, delete, complete, view, filter, exit):");
-            command = Console.ReadLine().ToLower();
+            command = Console.ReadLine()?.ToLower() ?? string.Empty;
 
             switch (command)
             {
                 case "add":
                     Console.WriteLine("Enter task title:");
-                    string title = Console.ReadLine();
+                    string? title = Console.ReadLine();
+                    if (string.IsNullOrEmpty(title))
+                    {
+                        Console.WriteLine("Title cannot be empty. Please try again.");
+                        break;
+                    }
                     Console.WriteLine("Enter due date (yyyy-mm-dd):");
-                    DateTime dueDate = DateTime.Parse(Console.ReadLine());
-                    taskManager.addTask(title, dueDate);
+                    string? dateInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(dateInput) || !DateTime.TryParse(dateInput, out DateTime dueDate))
+                    {
+                        Console.WriteLine("Date must be valid or cannot be empty. Please try again.");
+                        break;
+                    }
+                    taskManager.AddTask(title, dueDate);
                     break;
                 case "edit":
                     Console.WriteLine("Enter task ID to edit:");
-                    Guid idToEdit = Guid.Parse(Console.ReadLine());
+                    string? guidInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(guidInput) || !Guid.TryParse(guidInput, out Guid idToEdit))
+                    {
+                        Console.WriteLine("Task ID must be valid or cannot be empty. Please try again.");
+                        break;
+                    }
                     Console.WriteLine("Enter new title:");
-                    string newTitle = Console.ReadLine();
+                    string? newTitle = Console.ReadLine();
+                    if (string.IsNullOrEmpty(newTitle))
+                    {
+                        Console.WriteLine("Title cannot be empty. Please try again.");
+                        break;
+                    }
                     Console.WriteLine("Enter new due date (yyyy-mm-dd):");
-                    DateTime newDueDate = DateTime.Parse(Console.ReadLine());
-                    taskManager.editTask(idToEdit, newTitle, newDueDate);
+                    string? newDateInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(newDateInput) || !DateTime.TryParse(newDateInput, out DateTime newDueDate))
+                    {
+                        Console.WriteLine("Date must be valid or cannot be empty. Please try again.");
+                        break;
+                    }
+                    taskManager.EditTask(idToEdit, newTitle, newDueDate);
                     break;
                 case "delete":
                     Console.WriteLine("Enter task ID to delete:");
-                    Guid idToDelete = Guid.Parse(Console.ReadLine());
-                    taskManager.deleteTask(idToDelete);
+                    string? deleteGuidInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(deleteGuidInput) || !Guid.TryParse(deleteGuidInput, out Guid idToDelete))
+                    {
+                        Console.WriteLine("Task ID must be valid or cannot be empty. Please try again.");
+                        break;
+                    }
+                    taskManager.DeleteTask(idToDelete);
                     break;
                 case "complete":
                     Console.WriteLine("Enter task ID to mark as complete:");
-                    Guid idToComplete = Guid.Parse(Console.ReadLine());
-                    taskManager.completeTask(idToComplete);
+                    string? completeGuidInput = Console.ReadLine();
+                    if (string.IsNullOrEmpty(completeGuidInput) || !Guid.TryParse(completeGuidInput, out Guid idToComplete))
+                    {
+                        Console.WriteLine("Task ID must be valid or cannot be empty. Please try again.");
+                        break;
+                    }
+                    taskManager.CompleteTask(idToComplete);
                     break;
                 case "view":
-                    taskManager.viewAllTasks();
+                    taskManager.ViewAllTasks();
                     break;
                 case "filter":
                     Console.WriteLine("Enter filter criteria (e.g., completed, not completed, due today, due tomorrow, overdue):");
-                    string filterCriteria = Console.ReadLine().ToLower();
-                    taskManager.filterTasks(filterCriteria);
+                    string? filterCriteria = Console.ReadLine();
+                    if (string.IsNullOrEmpty(filterCriteria))
+                    {
+                        Console.WriteLine("Filter is empty. Presenting all tasks.");
+                        taskManager.ViewAllTasks();
+                        break;
+                    }
+                    taskManager.FilterTasks(filterCriteria);
                     break;
                 case "exit":
                     break;
