@@ -13,42 +13,42 @@ public class Tests
     [Test]
     public void TestTargetSum7ReturnsTrue()
     {
-        int[] numbers = { 1, 2, 3, 4, 5 };
+        int[] numbers = [1, 2, 3, 4, 5];
         Assert.That(TwoSumExists.IsTwoSum(numbers, 7), Is.True); // 2 + 5 = 7 OR 3 + 4 = 7
     }
 
     [Test]
     public void TestTargetSum10ReturnsFalse()
     {
-        int[] numbers = { 1, 2, 3, 4, 5 };
+        int[] numbers = [1, 2, 3, 4, 5];
         Assert.That(TwoSumExists.IsTwoSum(numbers, 10), Is.False);
     }
 
     [Test]
     public void TestTargetSum7ShouldReturnTrue()
     {
-        int[] numbers = { 1, 5, 2, 3, 4 };
+        int[] numbers = [1, 5, 2, 3, 4];
         Assert.That(TwoSumExists.IsTwoSum(numbers, 7), Is.True); // 5 + 2 = 7
     }
 
     [Test]
     public void TestTargetSum1ShouldReturnFalse()
     {
-        int[] numbers = { 1, 2, 3 };
+        int[] numbers = [1, 2, 3];
         Assert.That(TwoSumExists.IsTwoSum(numbers, 1), Is.False);
     }
 
     [Test]
     public void TestEmptyArrayShouldReturnFalse()
     {
-        int[] numbers = { };
+        int[] numbers = [];
         Assert.That(TwoSumExists.IsTwoSum(numbers, 5), Is.False);
     }
 
     [Test]
     public void TestNullArrayShouldReturnFalse()
     {
-        int[] numbers = null;
+        int[]? numbers = null;
         Assert.That(TwoSumExists.IsTwoSum(numbers, 5), Is.False);
     }
 }
